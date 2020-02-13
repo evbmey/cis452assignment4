@@ -1,4 +1,9 @@
-﻿
+﻿/*
+* Evan Meyer
+* WeaponModifier.cs
+* CIS452 Assignment 4
+*/
+
 public abstract class WeaponModifier : Weapon
 {
     private Weapon modifiedWeapon;
@@ -12,6 +17,8 @@ public abstract class WeaponModifier : Weapon
     {
         this.modifiedWeapon = modifiedWeapon;
     }
+
+    public Weapon ModifiedWeapon { get => modifiedWeapon; set => modifiedWeapon = value; }
 
     public override int Power { get => modifiedWeapon.Power + powerModifier; }
 

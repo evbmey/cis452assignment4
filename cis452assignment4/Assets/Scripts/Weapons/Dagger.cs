@@ -1,4 +1,9 @@
-﻿
+﻿/*
+* Evan Meyer
+* Dagger.cs
+* CIS452 Assignment 4
+*/
+
 public class Dagger : Weapon
 {
     public override int Power { get => 1; }

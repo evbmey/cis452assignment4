@@ -1,4 +1,9 @@
-﻿
+﻿/*
+* Evan Meyer
+* Sword.cs
+* CIS452 Assignment 4
+*/
+
 public class Sword : Weapon
 {
     public override int Power { get => 3; }

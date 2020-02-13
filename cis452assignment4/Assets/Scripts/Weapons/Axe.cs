@@ -1,4 +1,9 @@
-﻿
+﻿/*
+* Evan Meyer
+* Axe.cs
+* CIS452 Assignment 4
+*/
+
 public class Axe : Weapon
 {
     public override int Power { get => 5; }
