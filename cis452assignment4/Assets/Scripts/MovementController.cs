@@ -2,29 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
 public class MovementController : MonoBehaviour
 {
-    [SerializeField]
-    private float accelerationRate;
-    [SerializeField]
-    private float maxSpeed;
-    private new Rigidbody2D rigidbody;
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float jumpSpeed;
 
-    public Vector2 CurrentVelocity { get => rigidbody.velocity; set => rigidbody.velocity = value; }
-    public float CurrentSpeed { get => rigidbody.velocity.magnitude; }
+    private new Rigidbody2D rigidbody;
+    private bool jumping;
 
     public void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        jumping = false;
     }
 
-    public void Update()
+    public void Move(float x)
     {
-        Vector2 direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
+        Vector2 movement = Vector2.right * x * movementSpeed;
+        rigidbody.MovePosition(rigidbody.position + movement);
+    }
 
-        CurrentVelocity += direction * accelerationRate;
-        // Mathf.Clamp(-maxSpeed, CurrentSpeed, maxSpeed);
+    public void Jump()
+    {
+        jumping = true;
 
+        if (rigidbody.velocity.y == 0)
+        {
+            rigidbody.velocity = Vector2.up * jumpSpeed;
+        }
+    }
+
+    public void FixedUpdate()
+    {
+        if (rigidbody.velocity.y > 0)
+        {
+            if (jumping) rigidbody.gravityScale = 5f;
+            else rigidbody.gravityScale = 7.5f;
+        }
+        else
+        {
+            rigidbody.gravityScale = 10f;
+        }
     }
 }
