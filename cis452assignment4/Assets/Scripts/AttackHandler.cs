@@ -1,12 +1,18 @@
-﻿using UnityEngine;
+﻿/*
+* Evan Meyer
+* AttackHandler.cs
+* CIS452 Assignment 4
+*/
+
+using UnityEngine;
 
 public class AttackHandler : MonoBehaviour
 {
     [SerializeField]
     private WeaponObject weaponObject;
 
-    private const float SpeedMultiplier = 50f;
-    private const float FullSwingAngle = 90f;
+    private const float AttackSpeedMultiplier = 75f;
+    private const float FullSwingAngle = 120f;
     private float currentAngle;
     private bool swingingLeft;
 
@@ -36,7 +42,7 @@ public class AttackHandler : MonoBehaviour
         {
             bool rotating = true;
 
-            float angleIncrement = weaponObject.Speed * SpeedMultiplier * Time.fixedDeltaTime;
+            float angleIncrement = weaponObject.Speed * AttackSpeedMultiplier * Time.fixedDeltaTime;
             currentAngle += angleIncrement;
 
             if (currentAngle >= FullSwingAngle)

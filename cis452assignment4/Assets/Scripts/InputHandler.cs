@@ -1,5 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+* Evan Meyer
+* InputHandler.cs
+* CIS452 Assignment 4
+*/
+
 using UnityEngine;
 
 [RequireComponent(typeof(MovementController), typeof(AttackHandler))]
@@ -9,42 +13,45 @@ public class InputHandler : MonoBehaviour
     private AttackHandler attackHandler;
 
     private float xMovement;
-    private bool jumping, attacking, facingLeft;
+    public bool IsJumping { get; private set; }
+    public bool IsAttacking { get; private set; }
+    public bool IsFacingLeft { get => (Camera.main.ScreenToWorldPoint(Input.mousePosition).x - gameObject.transform.position.x) < 0; }
 
     public void Awake()
     {
         movementController = GetComponent<MovementController>();
         attackHandler = GetComponent<AttackHandler>();
-        jumping = false;
-        attacking = false;
+        IsJumping = false;
+        IsAttacking = false;
     }
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0)) 
+        if (Input.GetKey(KeyCode.Mouse0)) 
         { 
-            attacking = true;
+            IsAttacking = true;
         }
+
         if (Input.GetKeyDown(KeyCode.Space))
         { 
-            jumping = true;
+            IsJumping = true;
         }
 
         xMovement = Input.GetAxis("Horizontal");
-        facingLeft = (Camera.main.ScreenToWorldPoint(Input.mousePosition).x - gameObject.transform.position.x) < 0;
     }
 
     public void FixedUpdate()
     {
-        if (attacking)
+        if (IsAttacking)
         {
-            attackHandler.TryAttack(facingLeft);
-            attacking = false;
+            attackHandler.TryAttack(IsFacingLeft);
+            IsAttacking = false;
         }
-        if (jumping)
+
+        if (IsJumping)
         {
             movementController.Jump();
-            jumping = false;
+            IsJumping = false;
         }
 
         movementController.Move(xMovement * Time.fixedDeltaTime);

@@ -1,20 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+* Evan Meyer
+* MovementController.cs
+* CIS452 Assignment 4
+*/
+
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class MovementController : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpSpeed;
 
     private new Rigidbody2D rigidbody;
-    private bool jumping;
+    private new Collider2D collider;
+
+    private const float raycastLength = 0.1f;
+
+    private float distanceFromColliderCenter;
+
+    public bool IsJumping { get; private set; }
+    public bool IsGrounded 
+    {
+        get
+        {
+           RaycastHit2D hit = Physics2D.Raycast(gameObject.transform.position, -Vector2.up, distanceFromColliderCenter * raycastLength);
+            return hit != null;
+        }
+    }
 
     public void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-        jumping = false;
+        collider = GetComponent<Collider2D>();
+
+        IsJumping = false;
+    }
+
+    public void Start()
+    {
+        distanceFromColliderCenter = collider.bounds.extents.y ;
     }
 
     public void Move(float x)
@@ -25,11 +50,15 @@ public class MovementController : MonoBehaviour
 
     public void Jump()
     {
-        jumping = true;
+        IsJumping = true;
 
-        if (rigidbody.velocity.y == 0)
+        Debug.Log("try jump");
+
+        if (IsGrounded)
         {
-            rigidbody.velocity = Vector2.up * jumpSpeed;
+            Debug.Log("grounded");
+
+            rigidbody.velocity += Vector2.up * jumpSpeed;
         }
     }
 
@@ -37,7 +66,7 @@ public class MovementController : MonoBehaviour
     {
         if (rigidbody.velocity.y > 0)
         {
-            if (jumping) rigidbody.gravityScale = 5f;
+            if (IsJumping) rigidbody.gravityScale = 5f;
             else rigidbody.gravityScale = 7.5f;
         }
         else
