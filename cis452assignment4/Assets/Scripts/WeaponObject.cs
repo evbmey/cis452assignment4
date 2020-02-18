@@ -15,6 +15,8 @@ public class WeaponObject : MonoBehaviour
     private Vector3 startingPosition;
     private Quaternion startingRotation;
 
+    private const float KnockbackMultiplier = 100f;
+
     public int Power { get => weapon.Power; }
     public int Speed { get => weapon.Speed; }
     public string Name { get => weapon.Name; }
@@ -37,19 +39,19 @@ public class WeaponObject : MonoBehaviour
         gameObject.transform.localRotation = startingRotation;
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void OnTriggerEnter2D(Collider2D collider)
     {
         ITakeDamage objectToDamage;
-        if (collision.gameObject.TryGetComponent<ITakeDamage>(out objectToDamage))
+        if (collider.gameObject.TryGetComponent<ITakeDamage>(out objectToDamage))
         {
             objectToDamage.TakeDamage(Power);
         }
 
         ITakeKnockback objectToKnockback;
-        if (collision.gameObject.TryGetComponent<ITakeKnockback>(out objectToKnockback))
+        if (collider.gameObject.TryGetComponent<ITakeKnockback>(out objectToKnockback))
         {
-            Vector3 knockbackDirection = Vector3.Normalize(collision.transform.position - gameObject.transform.position);
-            objectToKnockback.TakeKnockback(knockbackDirection * Power);
+            Vector3 knockbackDirection = Vector3.Normalize(collider.transform.position - transformToOrbit.position);
+            objectToKnockback.TakeKnockback(knockbackDirection * Power * KnockbackMultiplier);
         }
     }
 
