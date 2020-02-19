@@ -6,7 +6,7 @@
 
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(BoxCollider2D), typeof(SpriteRenderer))]
 public class WeaponObject : MonoBehaviour
 {
     [SerializeField]
@@ -15,7 +15,9 @@ public class WeaponObject : MonoBehaviour
     private Vector3 startingPosition;
     private Quaternion startingRotation;
 
-    private const float KnockbackMultiplier = 100f;
+    private SpriteRenderer spriteRenderer;
+
+    private const float KnockbackMultiplier = 50f;
 
     public int Power { get => weapon.Power; }
     public int Speed { get => weapon.Speed; }
@@ -23,9 +25,10 @@ public class WeaponObject : MonoBehaviour
 
     public void Awake()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         startingPosition = gameObject.transform.localPosition;
         startingRotation = gameObject.transform.localRotation;
-        Equip<Stick>();
+        Equip<Sword>();
     }
 
     public void Start()
@@ -58,11 +61,22 @@ public class WeaponObject : MonoBehaviour
     public void Equip(Weapon newWeapon)
     {
         weapon = newWeapon;
+        spriteRenderer.sprite = weapon.Sprite;
     }
 
     public void Equip<TWeapon>() where TWeapon : Weapon, new()
     {
         Equip(new TWeapon());
+    }
+
+    public void Equip(string weaponName)
+    {
+        switch(weaponName)
+        {
+            case nameof(Sword): Equip<Sword>(); break;
+            case nameof(Axe): Equip<Axe>(); break;
+            case nameof(Dagger): Equip<Dagger>(); break;
+        }
     }
 
     public void Modify(WeaponModifier modifier)
