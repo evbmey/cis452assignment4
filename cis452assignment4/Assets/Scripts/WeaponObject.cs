@@ -79,13 +79,12 @@ public class WeaponObject : MonoBehaviour
         }
     }
 
-    public void Modify(WeaponModifier modifier)
+    public void Modify(string modifierName)
     {
-        Equip(weapon.WithModifier(modifier));
-    }
-
-    public void Modify<TModifier>() where TModifier : WeaponModifier, new()
-    {
-        Modify(new TModifier());
+        switch (modifierName)
+        {
+            case nameof(Sharpness): weapon = new Sharpness(weapon); break;
+            case nameof(Swiftness): weapon = new Swiftness(weapon); break;
+        }
     }
 }

@@ -13,14 +13,4 @@ public abstract class Weapon
     public abstract string Name { get; }
     public abstract Sprite Sprite { get; }
 
-    public Weapon WithModifier(WeaponModifier modifier)
-    {
-        modifier.ModifiedWeapon = this;
-        return modifier;
-    }
-
-    public Weapon WithModifier<TModifier>() where TModifier : WeaponModifier, new()
-    {
-        return WithModifier(new TModifier());
-    }
 }

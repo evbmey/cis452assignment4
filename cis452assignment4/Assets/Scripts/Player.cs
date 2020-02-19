@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour, ITakeDamage
 {
     [SerializeField]
     private int initialHealth;
+    [SerializeField]
+    private UnityEvent OnDeath;
     private new Rigidbody2D rigidbody;
 
     public int Health { get; private set; }
@@ -35,6 +38,7 @@ public class Player : MonoBehaviour, ITakeDamage
 
     public void Die()
     {
+        OnDeath?.Invoke();
         Destroy(gameObject);
     }
     
